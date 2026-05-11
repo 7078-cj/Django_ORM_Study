@@ -78,8 +78,8 @@ measure_with_access(
     Student.objects.prefetch_related(
         Prefetch(
             "courses",
-            queryset=Course.objects.prefetch_related("lessons")
-        )#this pre fetches the lessons related in the courses
+            queryset=Course.objects.prefetch_related("lessons")#this pre fetches the lessons related in the courses
+        )#this prefetch the Object Course relates in Student
     ),#this prefetches the courses related to the student,
     "student_w_prefetch"
 )
