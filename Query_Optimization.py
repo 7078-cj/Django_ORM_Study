@@ -86,3 +86,25 @@ measure_with_access(
 
 # student_wo_prefetch: 0.013622s
 # student_w_prefetch: 0.003585s
+
+measure_with_access(
+    Student.objects.all(),
+    "student_wo_prefetch"
+)
+
+measure_with_access(
+    Student.objects.select_related(
+        # only works if Student had FK/OneToOne fields (yours doesn't here)
+    ).prefetch_related(
+        Prefetch(
+            "courses",
+            queryset=Course.objects.select_related("category").prefetch_related("lessons")
+        )
+    ),#this prefetches the courses related to the student,
+    "student_w_prefetch_select_related"
+)
+
+# student_wo_prefetch:               0.016383s
+# student_w_prefetch:                0.006252s
+# student_wo_prefetch:               0.017116s
+# student_w_prefetch_select_related: 0.004800s
