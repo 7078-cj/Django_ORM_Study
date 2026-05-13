@@ -82,6 +82,23 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+class OutOfStockProduct(Product):
+    class Meta:
+        proxy = True
+    
+    class Manager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(number_in_stock__lte=0)
+    
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.number_in_stock = 0
+        
+        super().save(*args, **kwargs)
+        
+    objects = Manager()
+    
 
 
 class Order(models.Model):
