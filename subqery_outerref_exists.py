@@ -48,11 +48,13 @@ print(python_tag)
 
 
 python_tag = Tag.objects.filter(
-    courses=OuterRef('pk'),
+    courses=OuterRef('pk'),#ito yung titingin na kung same ba ng outer query na 
+                            #pk(course.id) at tag.courses na per id
     name='python'
 )
 
 python_course_exists = Course.objects.annotate(
-    has_python=Exists(python_tag)
+    has_python=Exists(python_tag)#d2 or Subquery din nilalagy ung pk example is Course.id is 1 then
+                                #courses=1,name='python' ito ung ifi filter
 )
 print(python_course_exists.values('title','has_python'))
