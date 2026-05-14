@@ -1,4 +1,3 @@
-from django.db import models
 
 # Create your models here.
 from django.db import models
@@ -110,3 +109,14 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveSmallIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+    
+
+from django.contrib.gis.db import models as gis_models
+
+class Place(gis_models.Model):
+    name = gis_models.CharField(max_length=255)
+    category = gis_models.CharField(max_length=100, blank=True)
+    location = gis_models.PointField(geography=True, spatial_index=True)
+
+    def __str__(self):
+        return self.name
